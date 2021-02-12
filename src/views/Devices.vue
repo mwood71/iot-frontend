@@ -1,6 +1,6 @@
 <template>
   <div>
-    home
+    Devices
 
   </div>
 </template>
@@ -9,6 +9,6 @@
 
 
 export default {
-  name: 'Home',
+  name: 'Devices',
 }
 </script>
