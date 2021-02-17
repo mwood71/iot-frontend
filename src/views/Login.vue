@@ -5,13 +5,13 @@
       <!-- Email input -->
       <div class="form-outline mb-4">
         <label class="form-label" for="username">Username</label>
-        <input type="text" id="username" class="form-control" />
+        <input v-model="username" type="text" id="username" class="form-control" />
       </div>
 
       <!-- Password input -->
       <div class="form-outline mb-4">
         <label class="form-label" for="password">Password</label>
-        <input type="password" id="password" class="form-control" />
+        <input v-model="password" type="password" id="password" class="form-control" />
       </div>
 
       <button type="submit" class="btn btn-primary btn-block">Log in</button>
@@ -23,39 +23,56 @@
 <script>
   import axios from 'axios'
 
+
   export default {
     name: 'Login',
     data() {
       return {
-        form: {
-          username: '',
-          password: '',
-        }
+
+        username: '',
+        password: '',
+
       }
     },
     methods: {
       onSubmit() {
 
-        let config = {
-          headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-            'Authorization': 'Basic MTkxYTNiNzAtZTA2MS00YjJkLWEwMDEtN2IzZDMyOTY3OTM5OmJlYWJjNTc4LTU4NjgtNDQ5OS1iZGNjLTZmZDQ1YzU5NDRjZA==',
-            'Access-Control-Allow-Origin': '*',
+        const headers = {
+          'Content-Type': 'application/json',
+        };
+        let payload = {
+          "username": this.username,
+          "password": this.password,
+          "token": this.$cookies.get("token")
+        };
 
-
-          }
-        }
-
-        axios.post('https://thingspace.verizon.com/api/ts/v1/oauth2/token', "grant_type=client_credentials", config)
-          .then((res) => {
-            console.log(res)
+        axios.post('http://localhost:1337/api/login', JSON.stringify(payload), {headers})
+          .then(response => {
+            this.$cookies.set("user_session",response.data.status)
+            this.$store.state.isAuthenticated = true
+            this.$router.push({name: 'Home'})
           })
-          .catch((error) => {
-            console.log(error)
-          }).finally(() => {
-            //Perform action in always
-          });
+          .catch(error => {
+            console.log(error);
+          })
+
       }
+
+    },
+
+    mounted() {
+
+      axios.get('http://localhost:1337/api/session')
+        .then(response => {
+
+          this.$store.state.token = response.data.access_token
+          this.$cookies.set("token",response.data.access_token)
+
+        })
+        .catch(error => {
+          console.log(error);
+        })
+
     }
   }
 </script>

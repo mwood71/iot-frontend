@@ -1,5 +1,5 @@
 <template>
-    <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+    <nav v-if="$route.name != 'Login'" class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse"
             aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -15,34 +15,40 @@
                 <li class="nav-item dropdown">
                     <router-link class="nav-link" to="/usage">Usage</router-link>
                 </li>
-                <li class="nav-item dropdown">
-                    <router-link class="nav-link" to="/login">Login</router-link>
-                </li>
+
             </ul>
 
         </div>
-           <div class="">
-        <ul class="navbar-nav ml-auto">
-            <li class="nav-item">
-                <a class="nav-link logout" href="#" @click="logout()">Logout</a>
-            </li>
-        </ul>
-    </div>
+        <div class="">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link logout" href="#" @click="logout()">Logout</a>
+                </li>
+            </ul>
+        </div>
 
     </nav>
 </template>
 
 <script>
 
+    // import axios from 'axios'
+
     export default {
         name: 'NavBar',
         methods: {
             logout() {
-                console.log("logout")
-            },
-        }
-    }
 
+                this.$cookies.remove("token");
+                this.$cookies.remove("user_session")
+                // this.$store.isAuthenticated = false
+                this.$router.push({name: 'Login'})
+
+            }
+
+        },
+
+    }
 </script>
 
 

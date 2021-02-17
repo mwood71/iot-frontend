@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div v-if="isAuthenticated">
+    <div>
       <NavBar />
     </div>
     <div class="marginTop">
@@ -13,15 +13,12 @@
   import NavBar from './components/NavBar'
 
 
+
   export default {
     components: {
       NavBar
     },
-    data() {
-      return {
-        isAuthenticated: true
-      }
-    },
+
 
 
   }
